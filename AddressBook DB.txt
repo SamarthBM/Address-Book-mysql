@@ -1,0 +1,432 @@
+
+UC1:
+
+CREATE DATABASE Address_Book;
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| address_book       |
+| information_schema |
+| mysql              |
+| payroll_service    |
+| performance_schema |
+| sys                |
++--------------------+
+
+mysql> use address_book;
+Database changed
+mysql> SELECT DATABASE();
++--------------+
+| DATABASE()   |
++--------------+
+| address_book |
++--------------+
+
+UC2:
+
+ CREATE  TABLE addressbook
+    ->     (
+    ->       SlNo            INT unsigned NOT NULL AUTO_INCREMENT,
+    ->       firstname       VARCHAR(30),
+    ->       lastname        VARCHAR(30),
+    ->       address         VARCHAR(100),
+    ->       city            VARCHAR(30),
+    ->       state           VARCHAR(30),
+    ->       zip             INT,
+    ->       phonenumber     BIGINT,
+    ->       emailid         VARCHAR(50),
+    ->       PRIMARY KEY     (SlNo)
+    ->      );
+Query OK, 0 rows affected, 1 warning (0.97 sec)
+
+mysql> DESCRIBE addressbook;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| SlNo        | int unsigned | NO   | PRI | NULL    | auto_increment |
+| firstname   | varchar(30)  | YES  |     | NULL    |                |
+| lastname    | varchar(30)  | YES  |     | NULL    |                |
+| address     | varchar(100) | YES  |     | NULL    |                |
+| city        | varchar(30)  | YES  |     | NULL    |                |
+| state       | varchar(30)  | YES  |     | NULL    |                |
+| zip         | int          | YES  |     | NULL    |                |
+| phonenumber | bigint       | YES  |     | NULL    |                |
+| emailid     | varchar(50)  | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+
+UC3: Add contacts into addressbook.
+
+ INSERT INTO addressbook(firstname, lastname, address, city, state, zip, phonenumber, emailid) VALUES
+    -> ('Samarth', 'BM', 'SSLayout', 'Davanagere', 'Karnataka', 577004, 9552147854, 'sam@gmail.com'),
+    -> ('Nihal', 'Reddy', 'RkNagar', 'Banglore', 'Karnataka', 500010, 8884527563, 'nr@yahoo.com');
+Query OK, 2 rows affected (0.27 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM addressbook;
++------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+| SlNo | firstname | lastname | address  | city       | state     | zip    | phonenumber | emailid       |
++------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+|    1 | Samarth   | BM       | SSLayout | Davanagere | Karnataka | 577004 |  9552147854 | sam@gmail.com |
+|    2 | Nihal     | Reddy    | RkNagar  | Banglore   | Karnataka | 500010 |  8884527563 | nr@yahoo.com  |
++------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+
+UC4: Edit address book using first name.
+
+ UPDATE addressbook SET zip = 577044 WHERE firstname = 'Samarth';
+Query OK, 1 row affected (0.09 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM addressbook;
++------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+| SlNo | firstname | lastname | address  | city       | state     | zip    | phonenumber | emailid       |
++------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+|    1 | Samarth   | BM       | SSLayout | Davanagere | Karnataka | 577044 |  9552147854 | sam@gmail.com |
+|    2 | Nihal     | Reddy    | RkNagar  | Banglore   | Karnataka | 500010 |  8884527563 | nr@yahoo.com  |
++------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+
+UC5: Delete contact using first name.
+
+
+mysql> INSERT INTO addressbook(firstname, lastname, address, city, state, zip, phonenumber, emailid) VALUES
+    -> ('Rahul', 'KK', 'Penya', 'Banglore', 'Karnataka', 500110, 8784523657, 'RKK@yahoo.com');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> SELECT * FROM addressbook;
++------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+| SlNo | firstname | lastname | address  | city       | state     | zip    | phonenumber | emailid       |
++------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+|    1 | Samarth   | BM       | SSLayout | Davanagere | Karnataka | 577044 |  9552147854 | sam@gmail.com |
+|    2 | Nihal     | Reddy    | RkNagar  | Banglore   | Karnataka | 500010 |  8884527563 | nr@yahoo.com  |
+|    3 | Rahul     | KK       | Penya    | Banglore   | Karnataka | 500110 |  8784523657 | RKK@yahoo.com |
++------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+3 rows in set (0.00 sec)
+
+mysql> DELETE FROM addressbook WHERE firstname = 'Nihal';
+Query OK, 1 row affected (0.10 sec)
+
+mysql> SELECT * FROM addressbook;
++------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+| SlNo | firstname | lastname | address  | city       | state     | zip    | phonenumber | emailid       |
++------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+|    1 | Samarth   | BM       | SSLayout | Davanagere | Karnataka | 577044 |  9552147854 | sam@gmail.com |
+|    3 | Rahul     | KK       | Penya    | Banglore   | Karnataka | 500110 |  8784523657 | RKK@yahoo.com |
++------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+
+UC6: Retrive person from address book using city or state.
+
+  SELECT firstname FROM addressbook WHERE city = 'Davanagere' or state = 'Karnataka';
++-----------+
+| firstname |
++-----------+
+| Samarth   |
+| Rahul     |
++-----------+
+
+UC7: Getting size of addressbook using city or state.
+
+ SELECT COUNT(firstname)  FROM addressbook WHERE city = 'Davanagere' or state = 'Karnataka';
++------------------+
+| COUNT(firstname) |
++------------------+
+|                2 |
++------------------+
+
+UC8: To sort first name with alphabetical.
+
+SELECT * FROM addressbook WHERE city = 'Davanagere' or city = 'Banglore' ORDER BY firstname;
++------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+| SlNo | firstname | lastname | address  | city       | state     | zip    | phonenumber | emailid       |
++------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+|    3 | Rahul     | KK       | Penya    | Banglore   | Karnataka | 500110 |  8784523657 | RKK@yahoo.com |
+|    1 | Samarth   | BM       | SSLayout | Davanagere | Karnataka | 577044 |  9552147854 | sam@gmail.com |
++------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+
+UC9: Alter table to add address book type.
+
+ALTER TABLE addressbook ADD type VARCHAR(20) AFTER SlNo;
+Query OK, 0 rows affected (1.21 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM addressbook;
++------+------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+| SlNo | type | firstname | lastname | address  | city       | state     | zip    | phonenumber | emailid       |
++------+------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+|    1 | NULL | Samarth   | BM       | SSLayout | Davanagere | Karnataka | 577044 |  9552147854 | sam@gmail.com |
+|    3 | NULL | Rahul     | KK       | Penya    | Banglore   | Karnataka | 500110 |  8784523657 | RKK@yahoo.com |
++------+------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+
+ UPDATE addressbook SET type = 'Family' WHERE firstname = 'Samarth';
+Query OK, 1 row affected (0.13 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE addressbook SET type = 'Friend' WHERE firstname = 'Rahul';
+Query OK, 1 row affected (0.13 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM addressbook;
++------+--------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+| SlNo | type   | firstname | lastname | address  | city       | state     | zip    | phonenumber | emailid       |
++------+--------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+|    1 | Family | Samarth   | BM       | SSLayout | Davanagere | Karnataka | 577044 |  9552147854 | sam@gmail.com |
+|    3 | Friend | Rahul     | KK       | Penya    | Banglore   | Karnataka | 500110 |  8784523657 | RKK@yahoo.com |
++------+--------+-----------+----------+----------+------------+-----------+--------+-------------+---------------+
+
+UC10: Count address book contact by type.
+
+ SELECT COUNT(type) FROM addressbook;
++-------------+
+| COUNT(type) |
++-------------+
+|           2 |
++-------------+
+
+UC11: Add person to family and friend.
+
+ INSERT INTO addressbook(type, firstname, lastname, address, city, state, zip, phonenumber, emailid) VALUES
+    -> ('Family', 'Ankush', 'PK', 'Joshburg', 'Kochi', 'Kerela', 452896, 8453321027, 'ankush@yahoo.com'),
+    -> ('Friend', 'Josh', 'Peter', 'Peterburg', 'Munnar', 'Kerela', 445896, 7854479658, 'JP@yahoo.com');
+Query OK, 2 rows affected (0.09 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM addressbook;
++------+--------+-----------+----------+-----------+------------+-----------+--------+-------------+------------------+
+| SlNo | type   | firstname | lastname | address   | city       | state     | zip    | phonenumber | emailid          |
++------+--------+-----------+----------+-----------+------------+-----------+--------+-------------+------------------+
+|    1 | Family | Samarth   | BM       | SSLayout  | Davanagere | Karnataka | 577044 |  9552147854 | sam@gmail.com    |
+|    3 | Friend | Rahul     | KK       | Penya     | Banglore   | Karnataka | 500110 |  8784523657 | RKK@yahoo.com    |
+|    4 | Family | Ankush    | PK       | Joshburg  | Kochi      | Kerela    | 452896 |  8453321027 | ankush@yahoo.com |
+|    5 | Friend | Josh      | Peter    | Peterburg | Munnar     | Kerela    | 445896 |  7854479658 | JP@yahoo.com     |
++------+--------+-----------+----------+-----------+------------+-----------+--------+-------------+------------------+
+
+
+UC12: Implementing ER Diagram.
+
+ CREATE TABLE address_book				// Creating a table address_book to store types.
+    -> (
+    ->  addressBookId INT NOT NULL AUTO_INCREMENT,
+    ->  addressBookName VARCHAR(100),
+    ->  PRIMARY KEY (addressBookId)
+    -> );
+Query OK, 0 rows affected (1.81 sec)
+
+mysql> describe address_book;
++-----------------+--------------+------+-----+---------+----------------+
+| Field           | Type         | Null | Key | Default | Extra          |
++-----------------+--------------+------+-----+---------+----------------+
+| addressBookId   | int          | NO   | PRI | NULL    | auto_increment |
+| addressBookName | varchar(100) | YES  |     | NULL    |                |
++-----------------+--------------+------+-----+---------+----------------+
+2 rows in set (0.11 sec)
+
+ INSERT INTO address_book VALUES			// Inserting types Friend and family.
+    -> (1, 'Friend'),
+    -> (2, 'Family');
+Query OK, 2 rows affected (0.19 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM address_book;
++---------------+-----------------+
+| addressBookId | addressBookName |
++---------------+-----------------+
+|             1 | Friend          |
+|             2 | Family          |
++---------------+-----------------+
+2 rows in set (0.04 sec)
+
+ CREATE TABLE contact_person (				// Creating table contact_person to store all person details.
+    ->     contactID int NOT NULL AUTO_INCREMENT,
+    ->     FirstName varchar(255),
+    ->     LastName varchar(255),
+    ->     Address varchar(255),
+    ->     City varchar(255),
+    ->     StateName varchar(255),
+    ->     Zipcode BIGINT,
+    ->     Phonenum BIGINT,
+    ->     EmailId varchar(255),
+    ->     addressBook_id int,
+    ->     PRIMARY KEY (contactID),
+    ->     FOREIGN KEY (addressBook_id) REFERENCES address_book(addressBookId) ON UPDATE CASCADE ON DELETE RESTRICT
+    -> );
+
+ describe contact_person;
++----------------+--------------+------+-----+---------+----------------+
+| Field          | Type         | Null | Key | Default | Extra          |
++----------------+--------------+------+-----+---------+----------------+
+| contactID      | int          | NO   | PRI | NULL    | auto_increment |
+| FirstName      | varchar(255) | YES  |     | NULL    |                |
+| LastName       | varchar(255) | YES  |     | NULL    |                |
+| Address        | varchar(255) | YES  |     | NULL    |                |
+| City           | varchar(255) | YES  |     | NULL    |                |
+| StateName      | varchar(255) | YES  |     | NULL    |                |
+| Zipcode        | bigint       | YES  |     | NULL    |                |
+| Phonenum       | bigint       | YES  |     | NULL    |                |
+| EmailId        | varchar(255) | YES  |     | NULL    |                |
+| addressBook_id | int          | YES  | MUL | NULL    |                |
++----------------+--------------+------+-----+---------+----------------+
+10 rows in set (0.00 sec)
+
+
+// Inserting contacts to address book.
+mysql>  INSERT INTO Contact_Person (Firstname, Lastname, Address, City, Statename, Zipcode, Phonenum, EmailID, addressBook_id) VALUES
+    -> ('Samarth', 'BM', 'SSLayout', 'Davanagere', 'Karnataka', 577004, 9552147854, 'sam@gmail.com', 1 ),
+    -> ('Nihal', 'Reddy', 'RkNagar', 'Banglore', 'Karnataka', 500010, 8884527563, 'nr@yahoo.com', 2),
+    -> ('Rahul', 'KK', 'Penya', 'Banglore', 'Karnataka', 500110, 8784523657, 'RKK@yahoo.com', 2),
+    -> ('Vijay', 'Talapathy', 'Adam Street', 'Chennai', 'Tamil Nadu', 600015, 9847581547, 'vijay3@gmail.com', 1);
+Query OK, 4 rows affected (0.14 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM contact_person;
++-----------+-----------+-----------+-------------+------------+------------+---------+------------+------------------+----------------+
+| contactID | FirstName | LastName  | Address     | City       | StateName  | Zipcode | Phonenum   | EmailId          | addressBook_id |
++-----------+-----------+-----------+-------------+------------+------------+---------+------------+------------------+----------------+
+|         1 | Samarth   | BM        | SSLayout    | Davanagere | Karnataka  |  577004 | 9552147854 | sam@gmail.com    |              1 |
+|         2 | Nihal     | Reddy     | RkNagar     | Banglore   | Karnataka  |  500010 | 8884527563 | nr@yahoo.com     |              2 |
+|         3 | Rahul     | KK        | Penya       | Banglore   | Karnataka  |  500110 | 8784523657 | RKK@yahoo.com    |              2 |
+|         4 | Vijay     | Talapathy | Adam Street | Chennai    | Tamil Nadu |  600015 | 9847581547 | vijay3@gmail.com |              1 |
++-----------+-----------+-----------+-------------+------------+------------+---------+------------+------------------+----------------+
+4 rows in set (0.00 sec)
+
+  CREATE TABLE Contact_type				// Creating table to hold contact type like family, friend and relaive.
+    -> (
+    ->  ContactTypeID INT NOT NULL AUTO_INCREMENT,
+    ->  ContactTypeName varchar(255),
+    ->  PRIMARY KEY (ContactTypeID)
+    -> );
+Query OK, 0 rows affected (0.47 sec)
+
+mysql> DESCRIBE contact_type;
++-----------------+--------------+------+-----+---------+----------------+
+| Field           | Type         | Null | Key | Default | Extra          |
++-----------------+--------------+------+-----+---------+----------------+
+| ContactTypeID   | int          | NO   | PRI | NULL    | auto_increment |
+| ContactTypeName | varchar(255) | YES  |     | NULL    |                |
++-----------------+--------------+------+-----+---------+----------------+
+
+ INSERT INTO contact_type (ContactTypeName)
+    ->  VALUES ('Family'),('Friend'),('Relative');
+Query OK, 3 rows affected (0.09 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM contact_type;
++---------------+-----------------+
+| ContactTypeID | ContactTypeName |
++---------------+-----------------+
+|             1 | Family          |
+|             2 | Friend          |
+|             3 | Relative        |
++---------------+-----------------+
+3 rows in set (0.00 sec)
+
+ CREATE TABLE Relation_type				// Creating relation type table.
+    -> (
+    ->  ContactType_id INT,
+    ->  contact_ID INT,
+    ->  FOREIGN KEY (ContactType_ID) REFERENCES Contact_Type(ContactTypeID),
+    ->  FOREIGN KEY (Contact_ID) REFERENCES Contact_Person(ContactID) ON UPDATE CASCADE ON DELETE RESTRICT
+    -> );
+Query OK, 0 rows affected (1.42 sec)
+
+mysql> DESCRIBE relation_type;
++----------------+------+------+-----+---------+-------+
+| Field          | Type | Null | Key | Default | Extra |
++----------------+------+------+-----+---------+-------+
+| ContactType_id | int  | YES  | MUL | NULL    |       |
+| contact_ID     | int  | YES  | MUL | NULL    |       |
++----------------+------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+
+ INSERT INTO Relation_Type VALUES
+    -> (1, 3),
+    -> (2, 3),
+    -> (3, 1),
+    -> (1, 2),
+    -> (2, 4);
+Query OK, 5 rows affected (0.09 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM relation_type;
++----------------+------------+
+| ContactType_id | contact_ID |
++----------------+------------+
+|              1 |          3 |
+|              2 |          3 |
+|              3 |          1 |
+|              1 |          2 |
+|              2 |          4 |
++----------------+------------+
+5 rows in set (0.00 sec)
+
+
+
+UC13: To perform UC6 - UC9 in above created ER Structure.
+
+UC6: Retrive person belonging to city or state.
+
+ SELECT AddressBookName,FirstName,LastName,Address,City,StateName,ZipCode,PhoneNum,EmailId,ContactTypeName
+    ->  FROM Contact_Person
+    ->  INNER JOIN  Address_Book on Address_Book.AddressBookID=Contact_Person.AddressBook_ID and (City='Banglore' or StateName='Karnataka')
+    ->  INNER JOIN Relation_Type on Relation_Type.Contact_ID=Contact_Person.ContactID
+    ->   INNER JOIN Contact_Type on Relation_Type.ContactType_ID=Contact_Type.ContactTypeID;
++-----------------+-----------+----------+----------+------------+-----------+---------+------------+---------------+-----------------+
+| AddressBookName | FirstName | LastName | Address  | City       | StateName | ZipCode | PhoneNum   | EmailId       | ContactTypeName |
++-----------------+-----------+----------+----------+------------+-----------+---------+------------+---------------+-----------------+
+| Friend          | Samarth   | BM       | SSLayout | Davanagere | Karnataka |  577004 | 9552147854 | sam@gmail.com | Relative        |
+| Family          | Nihal     | Reddy    | RkNagar  | Banglore   | Karnataka |  500010 | 8884527563 | nr@yahoo.com  | Family          |
+| Family          | Rahul     | KK       | Penya    | Banglore   | Karnataka |  500110 | 8784523657 | RKK@yahoo.com | Family          |
+| Family          | Rahul     | KK       | Penya    | Banglore   | Karnataka |  500110 | 8784523657 | RKK@yahoo.com | Friend          |
++-----------------+-----------+----------+----------+------------+-----------+---------+------------+---------------+-----------------+
+4 rows in set (0.01 sec)
+
+UC7: Understand size of addressbook by city or state.
+
+ select Count(*)As CountOfStateAndCity ,StateName,City
+    ->  from Contact_Person
+    -> INNER JOIN  Address_Book on Address_Book.AddressBookID=AddressBook_ID
+    ->  Group by StateName,City;
++---------------------+------------+------------+
+| CountOfStateAndCity | StateName  | City       |
++---------------------+------------+------------+
+|                   1 | Karnataka  | Davanagere |
+|                   2 | Karnataka  | Banglore   |
+|                   1 | Tamil Nadu | Chennai    |
++---------------------+------------+------------+
+3 rows in set (0.09 sec)
+
+UC8: To sort alphabetically by usinng person's name.
+
+SELECT AddressBookName,FirstName,LastName,Address,City,StateName,ZipCode,PhoneNum,EmailId,ContactTypeName
+    ->  FROM Contact_Person
+    ->  INNER JOIN  Address_Book on Address_Book.AddressBookID=AddressBook_ID
+    ->  INNER JOIN Relation_Type on Relation_Type.Contact_Id=Contact_Person.ContactID
+    ->  INNER JOIN Contact_Type on Relation_Type.ContactType_ID=Contact_Type.ContactTypeID
+    ->  ORDER BY(FirstName);
++-----------------+-----------+-----------+-------------+------------+------------+---------+------------+------------------+-----------------+
+| AddressBookName | FirstName | LastName  | Address     | City       | StateName  | ZipCode | PhoneNum   | EmailId          | ContactTypeName |
++-----------------+-----------+-----------+-------------+------------+------------+---------+------------+------------------+-----------------+
+| Family          | Nihal     | Reddy     | RkNagar     | Banglore   | Karnataka  |  500010 | 8884527563 | nr@yahoo.com     | Family          |
+| Family          | Rahul     | KK        | Penya       | Banglore   | Karnataka  |  500110 | 8784523657 | RKK@yahoo.com    | Family          |
+| Family          | Rahul     | KK        | Penya       | Banglore   | Karnataka  |  500110 | 8784523657 | RKK@yahoo.com    | Friend          |
+| Friend          | Samarth   | BM        | SSLayout    | Davanagere | Karnataka  |  577004 | 9552147854 | sam@gmail.com    | Relative        |
+| Friend          | Vijay     | Talapathy | Adam Street | Chennai    | Tamil Nadu |  600015 | 9847581547 | vijay3@gmail.com | Friend          |
++-----------------+-----------+-----------+-------------+------------+------------+---------+------------+------------------+-----------------+
+5 rows in set (0.03 sec)
+
+UC9: Identify addressbook with type.
+
+ SELECT COUNT(*) as NumberOfContacts,Contact_Type.ContactTypeName
+    -> FROM Contact_Person
+    -> INNER JOIN  Address_Book on Address_Book.AddressBookID=Contact_Person.AddressBook_ID
+    -> INNER JOIN Relation_Type on Relation_Type.Contact_ID=Contact_Person.ContactID
+    -> INNER JOIN Contact_Type on Relation_Type.ContactType_ID=Contact_Type.ContactTypeID
+    -> GROUP BY ContactTypeName;
++------------------+-----------------+
+| NumberOfContacts | ContactTypeName |
++------------------+-----------------+
+|                2 | Family          |
+|                2 | Friend          |
+|                1 | Relative        |
++------------------+-----------------+
+3 rows in set (0.00 sec)
